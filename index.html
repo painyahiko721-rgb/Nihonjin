@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Isekai Japanese Hunter</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131c2e;
+      --accent: #38bdf8;
+      --gold: #f59e0b;
+      --text: #f1f5f9;
+      --subtext: #94a3b8;
+      --success: #10b981;
+      --border: #1e293b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 14px; display: flex; flex-direction: column; gap: 14px; min-height: 100vh; }
+    
+    .status-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .avatar-frame {
+      font-size: 46px;
+      background: #1e293b;
+      border-radius: 50%;
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--gold);
+    }
+    .stats-area { flex: 1; }
+    .rank-pill {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 800;
+      background: var(--gold);
+      color: #000;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+    .armor-title { font-size: 14px; color: var(--accent); font-weight: 600; margin-bottom: 6px; }
+    .exp-bar-bg { background: #334155; height: 8px; border-radius: 999px; overflow: hidden; }
+    .exp-bar-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.3s; }
+
+    .quest-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+    .category-tag { font-size: 12px; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.5px; }
+    .jp-target { font-size: 44px; font-weight: bold; color: var(--accent); min-height: 54px; }
+    .romaji-target { font-size: 18px; color: var(--gold); font-style: italic; }
+    .meaning-target { font-size: 16px; color: var(--text); }
+    .note-box { font-size: 13px; color: var(--subtext); background: #0b1120; padding: 10px; border-radius: 8px; width: 100%; }
+
+    .action-grid { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 6px; }
+    button {
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    button:active { transform: scale(0.98); }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-secondary { background: #1e293b; color: var(--subtext); }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--success);
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="status-card">
+    <div class="avatar-frame" id="avatarDisplay">🧑‍🌾</div>
+    <div class="stats-area">
+      <span class="rank-pill" id="rankBadge">Rank E</span>
+      <div class="armor-title" id="armorName">Cloth Tunic & Branch</div>
+      <div class="exp-bar-bg">
+        <div class="exp-bar-fill" id="expFill"></div>
+      </div>
+      <div style="font-size: 12px; color: var(--subtext); margin-top: 4px;" id="statCounts">Quests Cleared: 0</div>
+    </div>
+  </div>
+
+  <div class="quest-card">
+    <div class="category-tag" id="lessonCategory">Roadmap Phase 1</div>
+    <div class="jp-target" id="jpDisplay">あ</div>
+    <div class="romaji-target" id="romajiDisplay">a</div>
+    <div class="meaning-target" id="meaningDisplay">Vowel: "Ah"</div>
+    <div class="note-box" id="noteDisplay">Start by mastering pure vowels before moving to consonant combinations.</div>
+    
+    <div class="action-grid">
+      <button class="btn-primary" onclick="claimQuest()">Claim Victory & EXP (+15)</button>
+      <button class="btn-secondary" onclick="resetAllProgress()">Reset Game Data</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Quest Complete! +15 EXP</div>
+
+  <script>
+    const CURRICULUM = [
+      { stage: "Hiragana - Core Vowels", jp: "あ", romaji: "a", meaning: "Sound: Ah", note: "The foundational sound of Japanese." },
+      { stage: "Hiragana - Core Vowels", jp: "い", romaji: "i", meaning: "Sound: Ee", note: "Keep lips wide and flat." },
+      { stage: "Hiragana - K Row", jp: "か", romaji: "ka", meaning: "Sound: Kah", note: "K + A sound combined." },
+      { stage: "Hiragana - Dakuten", jp: "が", romaji: "ga", meaning: "Sound: Gah", note: "Adding ' (tenten) turns 'K' into voiced 'G'." },
+      { stage: "Hiragana - Dakuten", jp: "ざ", romaji: "za", meaning: "Sound: Zah", note: "Adding ' (tenten) turns 'S' into voiced 'Z'." },
+      { stage: "Katakana - Foreign Words", jp: "ア", romaji: "a", meaning: "Katakana 'Ah'", note: "Used for borrowed words, tech, and foreign names." },
+      { stage: "Katakana - Foreign Words", jp: "カ", romaji: "ka", meaning: "Katakana 'Kah'", note: "Notice sharper, angular strokes compared to Hiragana." },
+      { stage: "Foundational Vocabulary", jp: "わたし", kanjiEquiv: "私", romaji: "watashi", meaning: "I / Me", note: "Unlocked as Hiragana. Kanji unlocks in Rank C." },
+      { stage: "Foundational Vocabulary", jp: "ほん", kanjiEquiv: "本", romaji: "hon", meaning: "Book", note: "Common noun for reading materials." },
+      { 
+        stage: "Sentence Pattern 1: [A] は [B] です",
+        jpTemplate: "{watashi} は がくせい です",
+        romaji: "watashi wa gakusei desu",
+        meaning: "I am a student.",
+        note: "Particle 'は' is written 'ha' but pronounced 'wa' when marking topics."
+      }
+    ];
+
+    const RANKS = [
+      { minExp: 0, rank: "Rank E", armor: "Novice Cloth & Stick", icon: "🧑‍🌾" },
+      { minExp: 30, rank: "Rank D", armor: "Reinforced Leather Armor", icon: "🏹" },
+      { minExp: 60, rank: "Rank C", armor: "Iron Plate & Bronze Sword", icon: "🛡️" },
+      { minExp: 90, rank: "Rank B", armor: "Tempered Silver Knight Armor", icon: "⚔️" },
+      { minExp: 120, rank: "Rank A", armor: "Golden Dragon Vanguard Mail", icon: "👑" },
+      { minExp: 150, rank: "Rank S", armor: "Mythic Hero Deity Armor", icon: "⚡" }
+    ];
+
+    let questIndex = parseInt(localStorage.getItem("questIndex")) || 0;
+    let totalExp = parseInt(localStorage.getItem("totalExp")) || 0;
+    let unlockedKanji = JSON.parse(localStorage.getItem("unlockedKanji")) || [];
+
+    function saveState() {
+      localStorage.setItem("questIndex", questIndex);
+      localStorage.setItem("totalExp", totalExp);
+      localStorage.setItem("unlockedKanji", JSON.stringify(unlockedKanji));
+    }
+
+    function renderJapaneseText(item) {
+      if (item.jpTemplate) {
+        let output = item.jpTemplate;
+        if (unlockedKanji.includes("私")) {
+          output = output.replace("{watashi}", "私");
+        } else {
+          output = output.replace("{watashi}", "わたし");
+        }
+        return output;
+      }
+      return item.jp;
+    }
+
+    function updateUI() {
+      const current = CURRICULUM[questIndex % CURRICULUM.length];
+
+      document.getElementById("lessonCategory").innerText = current.stage;
+      document.getElementById("jpDisplay").innerText = renderJapaneseText(current);
+      document.getElementById("romajiDisplay").innerText = current.romaji;
+      document.getElementById("meaningDisplay").innerText = current.meaning;
+      document.getElementById("noteDisplay").innerText = current.note;
+      document.getElementById("statCounts").innerText = `Quests Cleared: ${questIndex}`;
+
+      let activeRank = RANKS[0];
+      for (let i = 0; i < RANKS.length; i++) {
+        if (totalExp >= RANKS[i].minExp) {
+          activeRank = RANKS[i];
+        }
+      }
+
+      document.getElementById("rankBadge").innerText = activeRank.rank;
+      document.getElementById("armorName").innerText = activeRank.armor;
+      document.getElementById("avatarDisplay").innerText = activeRank.icon;
+
+      let pct = Math.min(100, Math.round((totalExp / 150) * 100));
+      document.getElementById("expFill").style.width = pct + "%";
+    }
+
+    function claimQuest() {
+      const current = CURRICULUM[questIndex % CURRICULUM.length];
+      
+      if (current.kanjiEquiv && !unlockedKanji.includes(current.kanjiEquiv)) {
+        unlockedKanji.push(current.kanjiEquiv);
+      }
+
+      totalExp += 15;
+      questIndex++;
+      saveState();
+      updateUI();
+
+      const toast = document.getElementById("toast");
+      toast.style.opacity = "1";
+      setTimeout(() => { toast.style.opacity = "0"; }, 1000);
+    }
+
+    function resetAllProgress() {
+      if (confirm("Reset game back to Level 1?")) {
+        localStorage.clear();
+        questIndex = 0;
+        totalExp = 0;
+        unlockedKanji = [];
+        updateUI();
+      }
+    }
+
+    updateUI();
+  </script>
+</body>
+</html>
