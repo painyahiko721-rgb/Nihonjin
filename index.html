@@ -3,99 +3,139 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Isekai Japanese: Reincarnation & The Demon Lord</title>
+  <title>Isekai Japanese: Rescue Princess Seraphina</title>
   <style>
     :root {
-      --bg: #090d16;
-      --card-bg: #131c2e;
+      --bg: #050811;
+      --card-bg: rgba(13, 21, 39, 0.94);
+      --card-border: rgba(56, 189, 248, 0.2);
       --accent: #38bdf8;
-      --gold: #f59e0b;
-      --text: #f1f5f9;
+      --accent-glow: rgba(56, 189, 248, 0.35);
+      --gold: #fbbf24;
+      --gold-bg: rgba(217, 119, 6, 0.2);
+      --gold-border: rgba(251, 191, 36, 0.45);
+      --text: #f8fafc;
       --subtext: #94a3b8;
       --success: #10b981;
       --danger: #ef4444;
-      --purple: #a855f7;
       --border: #1e293b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 12px; display: flex; flex-direction: column; gap: 12px; min-height: 100vh; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 12px;
+      padding-bottom: 80px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-    /* Top Raid Boss Bar */
+    /* Dynamic Battle Scenery Background */
+    .world-scenery {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 18%, #2e0819 0%, #070b16 75%);
+      overflow: hidden;
+    }
+    .castle-silhouette {
+      position: absolute;
+      top: 12%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 68px;
+      opacity: 0.32;
+      filter: drop-shadow(0 0 24px #ef4444);
+      animation: pulseCastle 4s ease-in-out infinite alternate;
+    }
+    @keyframes pulseCastle {
+      0% { opacity: 0.25; transform: translateX(-50%) scale(1); }
+      100% { opacity: 0.42; transform: translateX(-50%) scale(1.06); }
+    }
+    .trees-layer {
+      position: absolute;
+      bottom: 64px;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: space-around;
+      font-size: 34px;
+      opacity: 0.25;
+    }
+    .sway-tree { animation: sway 3s ease-in-out infinite alternate; }
+    @keyframes sway { 0% { transform: rotate(-3deg); } 100% { transform: rotate(3deg); } }
+
+    /* Demon Lord Raid Bar */
     .boss-card {
-      background: linear-gradient(180deg, #2a0815 0%, var(--card-bg) 100%);
-      border: 1px solid #7f1d1d;
+      background: linear-gradient(180deg, rgba(80, 10, 20, 0.92) 0%, rgba(20, 10, 20, 0.92) 100%);
+      border: 1px solid #b91c1c;
       border-radius: 14px;
       padding: 10px 14px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 20px rgba(220, 38, 38, 0.25);
     }
-    .boss-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; color: #f87171; }
-    .boss-hp-bg { background: #450a0a; height: 10px; border-radius: 999px; overflow: hidden; }
-    .boss-hp-fill { background: linear-gradient(90deg, #ef4444, #f87171); height: 100%; width: 100%; transition: width 0.4s; }
+    .boss-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: #fca5a5; letter-spacing: 0.5px; }
+    .boss-hp-bg { background: #3b0707; height: 10px; border-radius: 999px; overflow: hidden; border: 1px solid rgba(239,68,68,0.3); }
+    .boss-hp-fill { background: linear-gradient(90deg, #ef4444, #f43f5e, #fb7185); height: 100%; width: 100%; transition: width 0.4s ease; box-shadow: 0 0 10px #ef4444; }
+    .boss-objective { font-size: 10px; color: #fecdd3; display: flex; justify-content: space-between; font-weight: 600; }
 
-    /* Player Status Card */
+    /* Hero Status Card */
     .status-card {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 10px 12px;
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-bottom: 10px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
     }
     .avatar-btn {
-      font-size: 36px;
-      background: #1e293b;
+      font-size: 34px;
+      background: #131d33;
       border-radius: 50%;
-      width: 62px;
-      height: 62px;
+      width: 58px;
+      height: 58px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 2px solid var(--gold);
       cursor: pointer;
       position: relative;
+      box-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
     }
     .avatar-btn::after {
-      content: "⚙️";
+      content: "✏️";
       position: absolute;
       bottom: -2px;
       right: -2px;
-      font-size: 11px;
-      background: var(--card-bg);
+      font-size: 10px;
+      background: #1e293b;
       border-radius: 50%;
       padding: 2px;
     }
     .stats-area { flex: 1; }
-    .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-    .rank-pill {
-      font-size: 11px;
-      text-transform: uppercase;
-      font-weight: 800;
-      background: var(--gold);
-      color: #000;
-      padding: 2px 7px;
-      border-radius: 6px;
-    }
-    .bgm-btn {
-      background: #1e293b;
-      border: 1px solid var(--border);
-      color: var(--accent);
-      padding: 3px 7px;
-      border-radius: 6px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-    .player-name { font-size: 15px; font-weight: bold; }
-    .armor-title { font-size: 12px; color: var(--accent); }
-    .exp-bar-bg { background: #334155; height: 6px; border-radius: 999px; overflow: hidden; margin-top: 4px; }
-    .exp-bar-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.3s; }
+    .header-row { display: flex; justify-content: space-between; align-items: center; }
+    .rank-pill { font-size: 10px; text-transform: uppercase; font-weight: 800; background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #000; padding: 2px 7px; border-radius: 5px; }
+    .bgm-btn { background: #131d33; border: 1px solid var(--border); color: var(--accent); padding: 3px 7px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+    .player-name { font-size: 14px; font-weight: bold; }
+    .armor-title { font-size: 11px; color: var(--accent); }
+    .exp-bar-bg { background: #1e293b; height: 6px; border-radius: 999px; overflow: hidden; margin-top: 4px; }
+    .exp-bar-fill { background: linear-gradient(90deg, #0284c7, #38bdf8); height: 100%; width: 0%; transition: width 0.3s; }
 
-    /* Quest Card */
+    /* Navigation Panels */
+    .view-panel { display: none; flex-direction: column; gap: 10px; }
+    .view-panel.active { display: flex; }
+
+    /* Battle Quest Card */
     .quest-card {
       background: var(--card-bg);
-      border: 1px solid var(--border);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 16px;
       display: flex;
@@ -103,139 +143,304 @@
       align-items: center;
       text-align: center;
       gap: 10px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.5);
     }
     .quest-top-bar { display: flex; justify-content: space-between; width: 100%; align-items: center; }
-    .category-tag { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; text-align: left; }
+    .category-tag { font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; }
     .skip-btn {
-      background: #334155;
-      color: #fff;
+      background: #1e293b;
+      color: #e2e8f0;
       border: 1px solid #475569;
       font-size: 11px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 6px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 7px;
       cursor: pointer;
     }
-    
+
+    /* Action Buttons Row */
+    .action-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
     .sound-btn {
       background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      border: 1px solid rgba(56, 189, 248, 0.35);
       color: var(--accent);
       font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 12px;
+      padding: 7px 13px;
       border-radius: 8px;
+      transition: all 0.15s;
     }
+    .theory-btn {
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-border);
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.15);
+      transition: all 0.15s;
+    }
+    .theory-btn:active, .sound-btn:active { transform: scale(0.96); }
 
-    .jp-target { font-size: 38px; font-weight: bold; color: var(--accent); min-height: 48px; line-height: 1.2; }
+    .jp-target { font-size: 44px; font-weight: bold; color: var(--accent); min-height: 52px; line-height: 1.2; text-shadow: 0 0 16px var(--accent-glow); }
     .romaji-hint { font-size: 14px; color: var(--gold); font-style: italic; }
     .prompt-text { font-size: 13px; color: var(--subtext); }
 
-    .options-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      width: 100%;
-      margin-top: 4px;
-    }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px; }
     .option-btn {
       padding: 14px 8px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: #1e293b;
+      background: #141e33;
       color: var(--text);
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      transition: all 0.15s ease;
     }
     .option-btn:active { transform: scale(0.96); }
-    .option-btn.correct { background: var(--success) !important; color: #000 !important; border-color: var(--success); }
-    .option-btn.wrong { background: var(--danger) !important; color: #fff !important; border-color: var(--danger); }
+    .option-btn.correct { background: var(--success) !important; color: #000 !important; border-color: var(--success) !important; font-weight: 800; }
+    .option-btn.wrong { background: var(--danger) !important; color: #fff !important; border-color: var(--danger) !important; }
 
     .feedback-box {
       font-size: 12px;
       color: var(--subtext);
-      background: #0b1120;
+      background: #090e1a;
+      border: 1px solid var(--border);
       padding: 10px;
       border-radius: 8px;
       width: 100%;
-      min-height: 40px;
+      min-height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
     }
-
-    /* Fullscreen Story Dialogue Modal */
-    .story-overlay {
+        /* 4-BUTTON BOTTOM NAVIGATION BAR */
+    .bottom-nav {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(4, 7, 13, 0.96);
+      bottom: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(10, 16, 30, 0.94);
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 90;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.6);
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      color: var(--subtext);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      transition: color 0.15s;
+    }
+    .nav-btn span.icon { font-size: 20px; }
+    .nav-btn.active { color: var(--gold); }
+
+    /* ANIMATED PROLOGUE FULLSCREEN MODAL */
+    .prologue-screen {
+      position: fixed;
+      inset: 0;
+      background: #020409;
+      z-index: 1000;
       display: none;
       flex-direction: column;
       justify-content: space-between;
-      padding: 24px 20px;
-      z-index: 999;
+      padding: 16px;
+      overflow: hidden;
     }
-    .story-scene { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 16px; }
-    .story-art { font-size: 64px; }
-    .speaker-tag { font-size: 12px; text-transform: uppercase; color: var(--gold); letter-spacing: 1.5px; font-weight: 800; }
-    .story-text { font-size: 17px; line-height: 1.5; color: var(--text); max-width: 380px; }
-    .story-actions { width: 100%; }
-    .btn-next-story { width: 100%; padding: 14px; border-radius: 12px; border: none; background: #2563eb; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; }
-
-    /* Modals */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.75);
-      display: none;
+    .cinematic-stage {
+      flex: 1;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #080d1a;
+      border: 1px solid var(--border);
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-      z-index: 100;
     }
-    .modal-window {
-      background: var(--card-bg);
+
+    .street-bg {
+      position: absolute; width: 200%; height: 100%;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 65%, #334155 65%, #1e293b 100%);
+      animation: streetMove 6s linear infinite;
+    }
+    @keyframes streetMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .anime-hero-sprite {
+      position: relative;
+      z-index: 2;
+      animation: bobbing 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes bobbing { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+
+    .truck-actor {
+      position: absolute;
+      right: -140px;
+      z-index: 3;
+      transform: scaleX(-1);
+      animation: truckSpeed 1.4s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+    }
+    @keyframes truckSpeed {
+      0% { right: -140px; }
+      70% { right: 35%; }
+      100% { right: 42%; }
+    }
+    .shake-impact { animation: screenShake 0.4s ease-in-out; }
+    @keyframes screenShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-12px, 8px); }
+      40% { transform: translate(12px, -8px); }
+      60% { transform: translate(-8px, -6px); }
+      80% { transform: translate(8px, 6px); }
+    }
+    .white-flash {
+      position: absolute; inset: 0; background: #fff; z-index: 10;
+      opacity: 0; pointer-events: none;
+    }
+    .white-flash.active { animation: flashFade 1.2s forwards; }
+    @keyframes flashFade { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+    .eyelids {
+      position: absolute; inset: 0; z-index: 6; pointer-events: none;
+      box-shadow: inset 0 0 0 100px #000;
+      animation: blinkEyes 2.2s ease-in-out infinite;
+    }
+    @keyframes blinkEyes {
+      0%, 100% { clip-path: ellipse(65% 55% at 50% 50%); filter: blur(0px); }
+      50% { clip-path: ellipse(50% 2% at 50% 50%); filter: blur(6px); }
+    }
+    .ambulance-lights {
+      position: absolute; inset: 0; z-index: 4;
+      animation: beaconFlash 0.5s infinite alternate;
+    }
+    @keyframes beaconFlash {
+      0% { background: rgba(239, 68, 68, 0.4); }
+      100% { background: rgba(59, 130, 246, 0.4); }
+    }
+
+    .summoning-circle {
+      width: 170px; height: 170px; border-radius: 50%;
+      border: 3px dashed var(--gold);
+      box-shadow: 0 0 35px var(--gold);
+      animation: summonSpin 6s linear infinite;
+      position: absolute;
+    }
+    @keyframes summonSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .anime-goddess-sprite {
+      z-index: 2;
+      animation: goddessFloat 2s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.85));
+    }
+    @keyframes goddessFloat { from { transform: translateY(0); } to { transform: translateY(-12px); } }
+
+    .dialogue-box {
+      margin-top: 14px;
+      background: rgba(17, 26, 46, 0.95);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 400px;
-      padding: 18px;
+      border-radius: 14px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      max-height: 85vh;
-      overflow-y: auto;
+      gap: 8px;
     }
-    .modal-title { font-size: 18px; color: var(--accent); font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-    .input-box { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: #0b1120; color: #fff; font-size: 15px; }
+    .dialogue-speaker { font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 1px; font-weight: bold; }
+    .dialogue-text { font-size: 14px; line-height: 1.4; color: var(--text); min-height: 48px; }
+    .dialogue-btn {
+      padding: 12px; border-radius: 10px; border: none; background: #2563eb;
+      color: #fff; font-size: 15px; font-weight: bold; cursor: pointer;
+    }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 200; backdrop-filter: blur(4px); }
+    .modal-window { background: #0f172a; border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 390px; padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 85vh; overflow-y: auto; }
+    .modal-title { font-size: 17px; color: var(--accent); font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    .input-box { padding: 9px; border-radius: 8px; border: 1px solid var(--border); background: #090e1a; color: #fff; font-size: 14px; }
     .avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .avatar-choice { font-size: 26px; background: #1e293b; border: 2px solid transparent; border-radius: 10px; padding: 8px; cursor: pointer; }
     .avatar-choice.selected { border-color: var(--gold); }
-    .btn-action { background: #2563eb; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; }
-    .btn-close { background: #334155; color: var(--text); border: none; padding: 10px; border-radius: 10px; font-weight: 600; cursor: pointer; }
-    .error-item { background: #0b1120; border-left: 3px solid var(--danger); padding: 8px; border-radius: 6px; font-size: 12px; text-align: left; }
+    .btn-action { background: #2563eb; color: #fff; border: none; padding: 11px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+    .btn-close { background: #334155; color: var(--text); border: none; padding: 9px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+
+    .list-item { background: #141e33; border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+
+    .theory-parchment {
+      background: linear-gradient(180deg, #1e1b18 0%, #171410 100%);
+      border: 1px solid #b45309;
+      border-radius: 12px;
+      padding: 12px;
+      color: #fed7aa;
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .theory-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      border-bottom: 1px dashed rgba(251, 191, 36, 0.3);
+      padding-bottom: 2px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Demon Lord Raid Bar -->
+  <!-- Background Scenery Layer -->
+  <div class="world-scenery">
+    <div class="castle-silhouette">🏰</div>
+    <div class="trees-layer">
+      <span class="sway-tree">🌲</span>
+      <span class="sway-tree" style="animation-delay:0.5s;">🌳</span>
+      <span class="sway-tree" style="animation-delay:1s;">🌲</span>
+    </div>
+  </div>
+
+  <!-- Top Raid Boss Bar -->
   <div class="boss-card">
     <div class="boss-header">
-      <span>👿 DEMON LORD: MALAKOR</span>
+      <span>👿 DEMON LORD MALAKOR</span>
       <span id="bossHpLabel">HP: 10,000 / 10,000</span>
     </div>
     <div class="boss-hp-bg">
       <div class="boss-hp-fill" id="bossHpFill"></div>
     </div>
+    <div class="boss-objective">
+      <span>Objective: Rescue Princess Seraphina 👸</span>
+      <span>Tower Ward: Sealed</span>
+    </div>
   </div>
 
-  <!-- Hero Profile Status -->
+  <!-- Hero Status Card -->
   <div class="status-card">
     <div class="avatar-btn" id="avatarDisplay" onclick="openCustomizer()">🧑‍🌾</div>
     <div class="stats-area">
@@ -244,40 +449,103 @@
         <button class="bgm-btn" id="bgmBtn" onclick="toggleBGM()">🎵 BGM: Off</button>
       </div>
       <div class="player-name" id="playerNameDisplay">Isekai Hero</div>
-      <div class="armor-title" id="armorName">Cloth Tunic & Stick</div>
+      <div class="armor-title" id="armorName">Novice Cloth & Stick</div>
       <div class="exp-bar-bg">
         <div class="exp-bar-fill" id="expFill"></div>
       </div>
-      <div style="font-size: 11px; color: var(--subtext); margin-top: 4px;" id="statCounts">Quests: 0 | Level: 1</div>
+      <div style="font-size: 11px; color: var(--subtext); margin-top: 4px;" id="statCounts">Mastered: 0 | Level: 1</div>
     </div>
   </div>
 
-  <!-- Quest / Battle Terminal -->
-  <div class="quest-card">
-    <div class="quest-top-bar">
-      <div class="category-tag" id="lessonCategory">Roadmap Tier 1</div>
-      <button class="skip-btn" onclick="startSkipTest()">⏩ Skip via Test (80%)</button>
+  <!-- TAB 1: BATTLE QUEST VIEW -->
+  <div class="view-panel active" id="view-battle">
+    <div class="quest-card">
+      <div class="quest-top-bar">
+        <div class="category-tag" id="lessonCategory">Tier 1: Hiragana Vowels</div>
+        <button class="skip-btn" onclick="startSkipTest()">⏩ Skip via Test (80%)</button>
+      </div>
+      
+      <!-- Action Row: Voice Incantation + Theory Scroll -->
+      <div class="action-row">
+        <button class="sound-btn" onclick="playVoiceGuidance()">🔊 Voice Incantation</button>
+        <button class="theory-btn" onclick="openTheoryModal()">📜 Read Theory Scroll</button>
+      </div>
+
+      <div class="jp-target" id="jpDisplay">あ</div>
+      <div class="romaji-hint" id="romajiDisplay">a</div>
+      <div class="prompt-text" id="promptText">Cast the correct counter-spell:</div>
+
+      <div class="options-grid" id="optionsBox"></div>
+
+      <div class="feedback-box" id="feedbackDisplay">Read the Theory Scroll or chant to strike!</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: ROADMAP VIEW -->
+  <div class="view-panel" id="view-roadmap">
+    <div style="font-weight:bold; font-size:15px; color:var(--gold); margin-bottom:4px;">🗺️ Adventure Roadmap (Hiragana ➔ N3)</div>
+    <div id="roadmapList" style="display:flex; flex-direction:column; gap:8px;"></div>
+  </div>
+
+  <!-- TAB 3: GRIMOIRE / SPELLBOOK VIEW -->
+  <div class="view-panel" id="view-grimoire">
+    <div style="font-weight:bold; font-size:15px; color:var(--accent); margin-bottom:4px;">📖 Learned Runes & Kanji Spells</div>
+    <div id="grimoireList" style="display:flex; flex-direction:column; gap:8px;"></div>
+  </div>
+
+  <!-- TAB 4: HERO RECORD VIEW -->
+  <div class="view-panel" id="view-hero">
+    <div class="quest-card" style="align-items: stretch; text-align: left;">
+      <div class="modal-title">Hero Sanctuary</div>
+      <div style="font-size: 13px; color: var(--subtext);">Equipped Class: <strong id="heroClassLabel" style="color:#fff;">Novice Adventurer</strong></div>
+      <div style="font-size: 13px; color: var(--subtext);">Rank Title: <strong id="heroRankLabel" style="color:var(--gold);">Rank E</strong></div>
+      <div style="font-size: 13px; color: var(--subtext);">Total Damage Dealt: <strong id="heroDamageLabel" style="color:#f87171;">0 DMG</strong></div>
+      <button class="btn-action" style="margin-top:10px;" onclick="openCustomizer()">Customize Hero Profile</button>
+      <button class="btn-action" style="background:#475569;" onclick="triggerPrologue()">Replay Animated Prologue</button>
+    </div>
+  </div>
+
+  <!-- 4-BUTTON BOTTOM NAVIGATION BAR -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-btn-battle" onclick="switchTab('battle')">
+      <span class="icon">⚔️</span>
+      <span>Battle</span>
+    </button>
+    <button class="nav-btn" id="nav-btn-roadmap" onclick="switchTab('roadmap')">
+      <span class="icon">🗺️</span>
+      <span>Roadmap</span>
+    </button>
+    <button class="nav-btn" id="nav-btn-grimoire" onclick="switchTab('grimoire')">
+      <span class="icon">📖</span>
+      <span>Grimoire</span>
+    </button>
+    <button class="nav-btn" id="nav-btn-hero" onclick="switchTab('hero')">
+      <span class="icon">👤</span>
+      <span>Hero</span>
+    </button>
+  </nav>
+
+  <!-- ANIMATED PROLOGUE FULLSCREEN MODAL -->
+  <div class="prologue-screen" id="prologueModal">
+    <div class="cinematic-stage" id="cinematicStage">
+      <div class="white-flash" id="whiteFlash"></div>
+      <div id="sceneContainer" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div>
     </div>
     
-    <button class="sound-btn" onclick="playVoiceGuidance()">🔊 Incantation Audio</button>
-    <div class="jp-target" id="jpDisplay">あ</div>
-    <div class="romaji-hint" id="romajiDisplay">a</div>
-    <div class="prompt-text" id="promptText">Cast the correct counter-spell:</div>
-
-    <div class="options-grid" id="optionsBox"></div>
-
-    <div class="feedback-box" id="feedbackDisplay">Answer correctly to damage the Demon Lord!</div>
-  </div>
-
-  <!-- Story Prologue Cinematic Modal -->
-  <div class="story-overlay" id="storyModal">
-    <div class="story-scene">
-      <div class="story-art" id="storyArt">🎒</div>
-      <div class="speaker-tag" id="storySpeaker">Tokyo, Japan — 4:15 PM</div>
-      <div class="story-text" id="storyText">You are walking home from school after a long day of classes...</div>
+    <div class="dialogue-box">
+      <div class="dialogue-speaker" id="prologueSpeaker">Scene 1</div>
+      <div class="dialogue-text" id="prologueText">Loading story...</div>
+      <button class="dialogue-btn" onclick="nextPrologueStep()">Continue ➔</button>
     </div>
-    <div class="story-actions">
-      <button class="btn-next-story" onclick="nextStoryScene()">Continue ➔</button>
+  </div>
+    <!-- Theory / Scroll of Wisdom Modal -->
+  <div class="modal-overlay" id="theoryModal">
+    <div class="modal-window">
+      <div class="modal-title" style="color:var(--gold);">📜 Ancient Scroll of Wisdom (賢者の巻物)</div>
+      
+      <div class="theory-parchment" id="theoryContent"></div>
+
+      <button class="btn-action" style="background:var(--gold); color:#000;" onclick="closeTheoryModal()">Absorb Knowledge (+10 EXP)</button>
     </div>
   </div>
 
@@ -307,7 +575,6 @@
         <div class="input-box" id="currentEquipPreview" style="font-size:13px; color:var(--gold);">Novice Gear</div>
       </div>
       <button class="btn-action" onclick="saveCustomizer()">Save Changes</button>
-      <button class="btn-action" style="background:#475569;" onclick="triggerPrologue()">Replay Story Intro</button>
       <button class="btn-close" onclick="closeModals()">Close</button>
     </div>
   </div>
@@ -326,7 +593,7 @@
   </div>
 
   <script>
-    // 1. SOUND FX & BGM SYNTHESIZER
+    // 1. SOUND FX & BGM (Web Audio API)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let isBgmPlaying = false;
     let bgmInterval = null;
@@ -354,6 +621,16 @@
       playTone(200, 'sawtooth', 0.15, 0.1);
       setTimeout(() => playTone(140, 'sawtooth', 0.2, 0.1), 140);
     }
+    function sfxTruckHonk() {
+      playTone(330, 'sawtooth', 0.4, 0.15);
+      setTimeout(() => playTone(310, 'sawtooth', 0.5, 0.15), 100);
+    }
+    function sfxCrash() { playTone(120, 'square', 0.5, 0.2); }
+    function sfxWisdom() {
+      playTone(440, 'sine', 0.12, 0.06);
+      setTimeout(() => playTone(554.37, 'sine', 0.14, 0.06), 100);
+      setTimeout(() => playTone(659.25, 'sine', 0.2, 0.08), 200);
+    }
 
     const chillNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
     function playRelaxingChime() {
@@ -376,78 +653,186 @@
       }
     }
 
-    // 2. STORY PROLOGUE CINEMATIC DATA
-    const STORY_SCENES = [
-      { art: "🎒", speaker: "Real World — 4:15 PM", text: "You are walking home from school, thinking about what game to play tonight..." },
-      { art: "🚚💥", speaker: "SUDDEN IMPACT", text: "HONK!! A runaway delivery truck speeds straight through the red light! Before you can react—everything goes white!" },
-      { art: "👁️‍🗨️", speaker: "Fading Consciousness", text: "You blink slowly. A crowd gathers around you whispering. Sirens echo in the distance... Darkness takes over." },
-      { art: "✨👸✨", speaker: "Goddess Lunaria", text: "'Awaken, chosen traveler. Your soul has crossed the dimensional rift into our world of Aethelgard.'" },
-      { art: "👿🏰", speaker: "The Great Quest", text: "'The Demon Lord Malakor threatens to destroy our realm. Our sacred spells are written in the Japanese script of your realm. Master each glyph, build your power, and strike down the Demon King!'" }
-    ];
-    let storyStep = 0;
-
-    function triggerPrologue() {
-      closeModals();
-      storyStep = 0;
-      renderStoryScene();
-      document.getElementById("storyModal").style.display = "flex";
-    }
-
-    function renderStoryScene() {
-      const scene = STORY_SCENES[storyStep];
-      document.getElementById("storyArt").innerText = scene.art;
-      document.getElementById("storySpeaker").innerText = scene.speaker;
-      document.getElementById("storyText").innerText = scene.text;
-    }
-
-    function nextStoryScene() {
-      sfxTap();
-      storyStep++;
-      if (storyStep < STORY_SCENES.length) {
-        renderStoryScene();
-      } else {
-        document.getElementById("storyModal").style.display = "none";
-        localStorage.setItem("jp_prologueSeen", "true");
-      }
-    }
-
-    // 3. CURRICULUM ROADMAP (N5 -> N4 -> N3 SEQUENTIAL)
+    // 2. CURRICULUM ROADMAP WITH DETAILED THEORY SCROLLS
     const CURRICULUM = [
-      // --- TIER 1: THE FOUNDATION (HIRAGANA & DAKUTEN) ---
-      { stage: "Tier 1: Hiragana Vowels", jp: "あ", romaji: "a", answer: "a (Ah)", sound: "あ", options: ["a (Ah)", "i (Ee)", "u (Oo)", "o (Oh)"], note: "Open vowel 'ah'." },
-      { stage: "Tier 1: Hiragana Vowels", jp: "い", romaji: "i", answer: "i (Ee)", sound: "い", options: ["e (Eh)", "i (Ee)", "a (Ah)", "u (Oo)"], note: "Wide smile 'ee'." },
-      { stage: "Tier 1: Hiragana Vowels", jp: "う", romaji: "u", answer: "u (Oo)", sound: "う", options: ["u (Oo)", "o (Oh)", "a (Ah)", "ko"], note: "Unrounded lips 'oo'." },
-      { stage: "Tier 1: Dakuten", jp: "が", romaji: "ga", answer: "ga", sound: "が", options: ["ka", "ga", "za", "da"], note: "Tenten marks voice K into G." },
-
-      // --- TIER 2: KATAKANA ESSENTIALS ---
-      { stage: "Tier 2: Katakana Glyphs", jp: "ア", romaji: "a", answer: "Katakana 'a'", sound: "ア", options: ["Katakana 'a'", "Katakana 'i'", "Hiragana 'a'", "Katakana 'u'"], note: "Angular glyphs for foreign magic and items." },
-      { stage: "Tier 2: Katakana Glyphs", jp: "カ", romaji: "ka", answer: "Katakana 'ka'", sound: "カ", options: ["Katakana 'ka'", "Katakana 'ta'", "Katakana 'ro'", "Hiragana 'ka'"], note: "Resembles か without the third tick." },
-
-      // --- TIER 3: N5 VOCABULARY & PARTICLES ---
-      { stage: "Tier 3: N5 Core Vocab", jp: "わたし", kanjiEquiv: "私", romaji: "watashi", answer: "I / Me", sound: "わたし", options: ["I / Me", "You", "Book", "Student"], note: "Self pronoun. Becomes 私 in sentences." },
-      { stage: "Tier 3: N5 Core Vocab", jp: "ほん", kanjiEquiv: "本", romaji: "hon", answer: "Book", sound: "ほん", options: ["Book", "Water", "Sword", "Magic"], note: "Noun for books and spell tomes." },
-      { stage: "Tier 3: N5 Sentence Patterns", jpTemplate: "{watashi} は ゆうしゃ です", romaji: "watashi wa yuusha desu", answer: "I am a hero", sound: "わたしはゆうしゃです", options: ["I am a hero", "I am a student", "This is magic", "Who is the Demon King?"], note: "Topic marker 'は' + 'です' identity statement." },
-
-      // --- TIER 4: N4 INTERMEDIATE GRAMMAR ---
-      { stage: "Tier 4: N4 Potential & Permission", jpTemplate: "{watashi} は にほんご を はなせます", romaji: "watashi wa nihongo o hanasemasu", answer: "I can speak Japanese", sound: "わたしはにほんごをはなせます", options: ["I can speak Japanese", "I study Japanese", "Japanese is difficult", "I want to speak Japanese"], note: "N4 Potential verb form: 話す -> 話せます (Can speak)." },
-      { stage: "Tier 4: N4 Conjunction (~te-form)", jpTemplate: "まほう を つかって、てき を たおす", romaji: "mahou o tsukatte, teki o taosu", answer: "Use magic and defeat the enemy", sound: "まほうをつかって、てきをたおす", options: ["Use magic and defeat the enemy", "Run away from the enemy", "Learn magic tomorrow", "The enemy uses magic"], note: "N4 ~te form connects sequential actions." },
-
-      // --- TIER 5: N3 ADVANCED ADVENTURER GRAMMAR ---
-      { stage: "Tier 5: N3 Nuance (〜わけにはいかない)", jpTemplate: "まける わけにはいかない", romaji: "makeru wake ni wa ikanai", answer: "I cannot afford to lose", sound: "まけるわけにはいかない", options: ["I cannot afford to lose", "I might lose", "I want to win easily", "Losing is impossible"], note: "N3 Grammar: Expresses moral/circumstantial impossibility to lose." },
-      { stage: "Tier 5: N3 Condition (~さえ〜ば)", jpTemplate: "なかま さえ いれば、まおう に かてる", romaji: "nakama sae ireba, maou ni kateru", answer: "As long as I have allies, I can beat the Demon King", sound: "なかまさえいれば、まおうにかてる", options: ["As long as I have allies, I can beat the Demon King", "Even allies cannot win", "The Demon King has allies", "I fight alone"], note: "N3 Grammar: 'さえ〜ば' means 'as long as only this condition is met'." }
+      {
+        stage: "Tier 1: Hiragana Vowels",
+        jp: "あ",
+        romaji: "a",
+        answer: "a (Ah)",
+        sound: "あ",
+        options: ["a (Ah)", "i (Ee)", "u (Oo)", "o (Oh)"],
+        note: "Open vowel 'ah'.",
+        theory: {
+          concept: "The First Sacred Glyph: 'あ' (a)",
+          pronunciation: "Pronounced like 'ah' in 'father'. Do not close your throat.",
+          mnemonic: "Looks like an Apple with an arch and cross through it.",
+          formula: "Stroke 1: Horizontal line ➔ Stroke 2: Downward curve ➔ Stroke 3: Big loop on right."
+        }
+      },
+      {
+        stage: "Tier 1: Hiragana Vowels",
+        jp: "い",
+        romaji: "i",
+        answer: "i (Ee)",
+        sound: "い",
+        options: ["e (Eh)", "i (Ee)", "a (Ah)", "u (Oo)"],
+        note: "Wide smile 'ee'.",
+        theory: {
+          concept: "The Second Sacred Glyph: 'い' (i)",
+          pronunciation: "Pronounced like 'ee' in 'meet', but clipped crisp and short.",
+          mnemonic: "Two parallel standing needles or two eels swimming side by side.",
+          formula: "Left stroke has a small upward tick at the bottom. Right stroke is slightly shorter."
+        }
+      },
+      {
+        stage: "Tier 1: Hiragana Vowels",
+        jp: "う",
+        romaji: "u",
+        answer: "u (Oo)",
+        sound: "う",
+        options: ["u (Oo)", "o (Oh)", "a (Ah)", "ko"],
+        note: "Unrounded lips 'oo'.",
+        theory: {
+          concept: "The Third Sacred Glyph: 'う' (u)",
+          pronunciation: "Lips are relaxed and flat (not puckered like English 'oo').",
+          mnemonic: "Looks like someone doubled over in shock, screaming 'Ugh!'.",
+          formula: "Top dash stroke ➔ Sweeping C-curve beneath."
+        }
+      },
+      {
+        stage: "Tier 1: Dakuten",
+        jp: "が",
+        romaji: "ga",
+        answer: "ga",
+        sound: "が",
+        options: ["ka", "ga", "za", "da"],
+        note: "Tenten marks voice K into G.",
+        theory: {
+          concept: "Dakuten Mark: Tenten (゛)",
+          pronunciation: "Voiced throat vibration changes 'ka' into 'ga'.",
+          mnemonic: "The two diagonal ticks (tenten) represent vibration waves.",
+          formula: "か (ka) + ゛ = が (ga)."
+        }
+      },
+      {
+        stage: "Tier 2: Katakana Glyphs",
+        jp: "ア",
+        romaji: "a",
+        answer: "Katakana 'a'",
+        sound: "ア",
+        options: ["Katakana 'a'", "Katakana 'i'", "Hiragana 'a'", "Katakana 'u'"],
+        note: "Angular glyphs for foreign magic and items.",
+        theory: {
+          concept: "Katakana Glyph 'ア' (a)",
+          pronunciation: "Identical sound to Hiragana あ, but written with sharp angular lines.",
+          mnemonic: "Looks like the capital letter 'A' missing its right leg.",
+          formula: "Used specifically for imported foreign words, potion names, and equipment."
+        }
+      },
+      {
+        stage: "Tier 2: Katakana Glyphs",
+        jp: "カ",
+        romaji: "ka",
+        answer: "Katakana 'ka'",
+        sound: "カ",
+        options: ["Katakana 'ka'", "Katakana 'ta'", "Katakana 'ro'", "Hiragana 'ka'"],
+        note: "Resembles か without the third tick.",
+        theory: {
+          concept: "Katakana Glyph 'カ' (ka)",
+          pronunciation: "Sharp 'ka'.",
+          mnemonic: "Identical to Hiragana か, but stripped of the outer accent stroke.",
+          formula: "Left angled hook ➔ Downward slash stroke."
+        }
+      },
+      {
+        stage: "Tier 3: N5 Core Vocab",
+        jp: "わたし",
+        kanjiEquiv: "私",
+        romaji: "watashi",
+        answer: "I / Me",
+        sound: "わたし",
+        options: ["I / Me", "You", "Book", "Student"],
+        note: "Self pronoun. Becomes 私 in sentences.",
+        theory: {
+          concept: "First Person Pronoun: わたし (私)",
+          pronunciation: "wa-ta-shi (gentle neutral cadence).",
+          mnemonic: "The Kanji 私 consists of 禾 (grain) + 厶 (private/self).",
+          formula: "Standard polite pronoun used by heroes to address themselves."
+        }
+      },
+      {
+        stage: "Tier 3: N5 Core Vocab",
+        jp: "ほん",
+        kanjiEquiv: "本",
+        romaji: "hon",
+        answer: "Book",
+        sound: "ほん",
+        options: ["Book", "Water", "Sword", "Magic"],
+        note: "Noun for books and spell tomes.",
+        theory: {
+          concept: "Noun: ほん (本)",
+          pronunciation: "hon (ends with resonant nasal 'n').",
+          mnemonic: "The Kanji 本 depicts a tree (木) with a line at the base marking origin/root.",
+          formula: "Can also mean 'origin' or act as a counter for long cylindrical items."
+        }
+      },
+      {
+        stage: "Tier 3: N5 Sentence Patterns",
+        jpTemplate: "{watashi} は ゆうしゃ です",
+        romaji: "watashi wa yuusha desu",
+        answer: "I am a hero",
+        sound: "わたしはゆうしゃです",
+        options: ["I am a hero", "I am a student", "This is magic", "Who is the Demon King?"],
+        note: "Topic marker 'は' + 'です' identity statement.",
+        theory: {
+          concept: "Fundamental Sentence Pattern: [A] は [B] です",
+          pronunciation: "CRITICAL: The particle 'は' is written as 'ha', but pronounced 'wa'!",
+          mnemonic: "'A は' sets the topic ('As for A...'), and 'B です' equates it ('is B').",
+          formula: "[Topic] は [Noun/Adj] です ➔ 'Topic is Noun'."
+        }
+      },
+      {
+        stage: "Tier 4: N4 Potential Form",
+        jpTemplate: "{watashi} は にほんご を はなせます",
+        romaji: "watashi wa nihongo o hanasemasu",
+        answer: "I can speak Japanese",
+        sound: "わたしはにほんごをはなせます",
+        options: ["I can speak Japanese", "I study Japanese", "Japanese is difficult", "I want to speak Japanese"],
+        note: "N4 Potential verb form: 話す -> 話せます (Can speak).",
+        theory: {
+          concept: "Potential Form (Can Do): 話せる / 話せます",
+          pronunciation: "ha-na-se-ma-su.",
+          mnemonic: "Changing the 'u' vowel to 'e' converts action to ability: 話す (speak) ➔ 話せる (can speak).",
+          formula: "Polite form: [Verb stem -e] + ます."
+        }
+      },
+      {
+        stage: "Tier 5: N3 Complex Sentence",
+        jpTemplate: "まける わけにはいかない",
+        romaji: "makeru wake ni wa ikanai",
+        answer: "I cannot afford to lose",
+        sound: "まけるわけにはいかない",
+        options: ["I cannot afford to lose", "I might lose", "I want to win easily", "Losing is impossible"],
+        note: "N3 Grammar: Expresses moral impossibility to surrender.",
+        theory: {
+          concept: "N3 Advanced Grammar: 〜わけにはいかない",
+          pronunciation: "wa-ke-ni-wa-i-ka-na-i.",
+          mnemonic: "Used when your conscience, honor, or circumstance makes losing unthinkable.",
+          formula: "[Verb Dictionary Form] + わけにはいかない ➔ 'Cannot afford to do X'."
+        }
+      }
     ];
 
-    // 4. RANKS & ARMOR
     const RANKS = [
-       { minExp: 0, rank: "Rank E", armor: "Novice Cloth & Stick" },
+      { minExp: 0, rank: "Rank E", armor: "Novice Cloth & Stick" },
       { minExp: 60, rank: "Rank D", armor: "Reinforced Leather Armor" },
       { minExp: 140, rank: "Rank C", armor: "Iron Plate & Mithril Sword" },
       { minExp: 240, rank: "Rank B", armor: "Tempered Knight Breastplate" },
       { minExp: 360, rank: "Rank A", armor: "Golden Dragon Vanguard Mail" },
       { minExp: 500, rank: "Rank S", armor: "Mythic Hero Deity Armor" }
     ];
-
-    // 5. GAME STATE & SAVE SYSTEM
+        // 3. PERSISTENT STATE
     const MAX_BOSS_HP = 10000;
     let bossHp = parseInt(localStorage.getItem("jp_bossHp")) || MAX_BOSS_HP;
     let questIndex = parseInt(localStorage.getItem("jp_questIndex")) || 0;
@@ -457,7 +842,6 @@
     let heroAvatar = localStorage.getItem("jp_heroAvatar") || "🧑‍🌾";
     let isAnsweringBlocked = false;
 
-    // Testing variables
     let isSkipTestActive = false;
     let testQuestions = [];
     let testStep = 0;
@@ -473,7 +857,240 @@
       localStorage.setItem("jp_heroAvatar", heroAvatar);
     }
 
-    // 6. VOICE INCANTATION
+    // 4. ANIMATED PROLOGUE ENGINE
+    let prologueStep = 0;
+    const PROLOGUE_DATA = [
+      {
+        speaker: "Real World — Walking Home from School",
+        text: "School just ended. You swing your backpack as you stroll down the road thinking about your favorite games...",
+        render: () => {
+          return `
+            <div class="street-bg"></div>
+            <div class="anime-hero-sprite">
+              <svg width="80" height="110" viewBox="0 0 80 110">
+                <path d="M 25 35 Q 20 15 40 10 Q 60 15 55 35 Z" fill="#1e1e24"/>
+                <path d="M 23 25 Q 15 15 30 12 Q 45 8 58 20" stroke="#1e1e24" stroke-width="4" fill="none"/>
+                <circle cx="40" cy="30" r="14" fill="#fcd34d"/>
+                <ellipse cx="35" cy="30" rx="2" ry="3" fill="#0f172a"/>
+                <ellipse cx="45" cy="30" rx="2" ry="3" fill="#0f172a"/>
+                <path d="M 28 44 L 52 44 L 56 80 L 24 80 Z" fill="#1e293b"/>
+                <path d="M 37 44 L 40 56 L 43 44 Z" fill="#ef4444"/>
+                <rect x="18" y="46" width="10" height="26" rx="4" fill="#0284c7"/>
+                <rect x="28" y="80" width="8" height="25" fill="#0f172a"/>
+                <rect x="44" y="80" width="8" height="25" fill="#0f172a"/>
+              </svg>
+            </div>
+          `;
+        }
+      },
+      {
+        speaker: "WATCH OUT!!",
+        text: "HONK HONK!! An out-of-control truck barrels straight through the crosswalk! Before you can jump—IMPACT!!",
+        render: () => {
+          sfxTruckHonk();
+          setTimeout(() => {
+            sfxCrash();
+            document.getElementById("cinematicStage").classList.add("shake-impact");
+            document.getElementById("whiteFlash").classList.add("active");
+          }, 800);
+          return `
+            <div class="street-bg"></div>
+            <div class="anime-hero-sprite" style="animation:none; transform:scaleX(-1);">
+              <svg width="80" height="110" viewBox="0 0 80 110">
+                <circle cx="40" cy="30" r="14" fill="#fcd34d"/>
+                <ellipse cx="36" cy="28" rx="3" ry="4" fill="#0f172a"/>
+                <ellipse cx="46" cy="28" rx="3" ry="4" fill="#0f172a"/>
+                <circle cx="41" cy="38" r="3" fill="#0f172a"/>
+                <path d="M 28 44 L 52 44 L 56 80 L 24 80 Z" fill="#1e293b"/>
+              </svg>
+            </div>
+            <div class="truck-actor">
+              <svg width="130" height="85" viewBox="0 0 130 85">
+                <rect x="10" y="10" width="80" height="55" rx="4" fill="#f8fafc"/>
+                <path d="M 90 25 L 115 25 L 125 45 L 125 65 L 90 65 Z" fill="#ef4444"/>
+                <rect x="95" y="30" width="22" height="16" rx="2" fill="#38bdf8"/>
+                <circle cx="30" cy="68" r="11" fill="#1e293b"/>
+                <circle cx="30" cy="68" r="5" fill="#94a3b8"/>
+                <circle cx="105" cy="68" r="11" fill="#1e293b"/>
+                <circle cx="105" cy="68" r="5" fill="#94a3b8"/>
+                <circle cx="125" cy="54" r="5" fill="#fef08a" filter="drop-shadow(0 0 6px #facc15)"/>
+              </svg>
+            </div>
+          `;
+        }
+      },
+      {
+        speaker: "Fading Consciousness",
+        text: "Your eyes blink slowly. Blurry crowds gather around. Red and blue emergency beacons flash as an ambulance speeds you away...",
+        render: () => {
+          return `
+            <div class="ambulance-lights"></div>
+            <div class="eyelids"></div>
+            <div style="font-size:54px; z-index:5;">🚑</div>
+          `;
+        }
+      },
+      {
+        speaker: "Goddess Lunaria's Summoning Circle",
+        text: "A sacred golden circle ignites beneath your feet! Goddess Lunaria descends through divine starlight...",
+        render: () => {
+          return `
+            <div class="summoning-circle"></div>
+            <div class="anime-goddess-sprite">
+              <svg width="90" height="130" viewBox="0 0 90 130">
+                <circle cx="45" cy="22" r="20" stroke="#f59e0b" stroke-width="2" fill="none" opacity="0.8"/>
+                <path d="M 25 35 Q 10 70 20 100 Q 45 110 70 100 Q 80 70 65 35 Z" fill="#e0e7ff"/>
+                <circle cx="45" cy="32" r="13" fill="#fde68a"/>
+                <ellipse cx="40" cy="31" rx="2" ry="3" fill="#d97706"/>
+                <ellipse cx="50" cy="31" rx="2" ry="3" fill="#d97706"/>
+                <path d="M 32 45 L 58 45 L 68 115 L 22 115 Z" fill="#ffffff" opacity="0.95"/>
+                <path d="M 22 55 Q 8 85 24 105" stroke="#38bdf8" stroke-width="3" fill="none"/>
+                <path d="M 68 55 Q 82 85 66 105" stroke="#38bdf8" stroke-width="3" fill="none"/>
+                <line x1="72" y1="20" x2="72" y2="120" stroke="#f59e0b" stroke-width="3"/>
+                <circle cx="72" cy="20" r="7" fill="#fbbf24"/>
+              </svg>
+            </div>
+          `;
+        }
+      },
+      {
+        speaker: "The Kidnapped Princess & The Quest",
+        text: "'Chosen Hero, Demon Lord Malakor has invaded our realm and kidnapped Princess Seraphina 👸⛓️! Her prison tower is sealed by demonic wards that only Japanese magic can shatter. Slay the Demon Lord and rescue her!'",
+        render: () => {
+          return `
+            <div style="position:relative; display:flex; align-items:center; gap:20px; z-index:2;">
+              <span style="font-size:54px; filter:drop-shadow(0 0 12px #ef4444);">👿🏰</span>
+              <span style="font-size:42px; animation:bobbing 1s infinite alternate;">👸⛓️</span>
+            </div>
+          `;
+        }
+      }
+    ];
+
+    function triggerPrologue() {
+      closeModals();
+      prologueStep = 0;
+      document.getElementById("prologueModal").style.display = "flex";
+      renderPrologueScene();
+    }
+
+    function renderPrologueScene() {
+      const stage = document.getElementById("cinematicStage");
+      stage.classList.remove("shake-impact");
+      document.getElementById("whiteFlash").classList.remove("active");
+
+      const scene = PROLOGUE_DATA[prologueStep];
+      document.getElementById("prologueSpeaker").innerText = scene.speaker;
+      document.getElementById("prologueText").innerText = scene.text;
+      document.getElementById("sceneContainer").innerHTML = scene.render();
+    }
+
+    function nextPrologueStep() {
+      sfxTap();
+      prologueStep++;
+      if (prologueStep < PROLOGUE_DATA.length) {
+        renderPrologueScene();
+      } else {
+        document.getElementById("prologueModal").style.display = "none";
+        localStorage.setItem("jp_prologueSeen", "true");
+      }
+    }
+
+    // 5. THEORY SCROLL LOGIC
+    function openTheoryModal() {
+      sfxWisdom();
+      const current = CURRICULUM[questIndex % CURRICULUM.length];
+      const box = document.getElementById("theoryContent");
+      const th = current.theory || {
+        concept: "Lesson Rule & Foundation",
+        pronunciation: "Speak clearly and practice with audio.",
+        mnemonic: "Practice repeated writing to lock into memory.",
+        formula: current.note
+      };
+
+      box.innerHTML = `
+        <div class="theory-section-title">Concept & Rune Lore</div>
+        <div><strong>${th.concept}</strong></div>
+        
+        <div class="theory-section-title">Pronunciation Incantation</div>
+        <div>${th.pronunciation}</div>
+        
+        <div class="theory-section-title">Visual Memory Mnemonic</div>
+        <div>${th.mnemonic}</div>
+        
+        <div class="theory-section-title">Grammar Formula / Stroke Rule</div>
+        <div style="color:#fff; font-weight:600;">${th.formula}</div>
+      `;
+
+      document.getElementById("theoryModal").style.display = "flex";
+    }
+
+    function closeTheoryModal() {
+      sfxTap();
+      totalExp += 10;
+      saveState();
+      document.getElementById("theoryModal").style.display = "none";
+      updateUI();
+    }
+
+    // 6. TAB NAVIGATION
+    function switchTab(tabId) {
+      sfxTap();
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+
+      document.getElementById(`view-${tabId}`).classList.add("active");
+      document.getElementById(`nav-btn-${tabId}`).classList.add("active");
+
+      if (tabId === 'roadmap') renderRoadmapTab();
+      if (tabId === 'grimoire') renderGrimoireTab();
+      if (tabId === 'hero') renderHeroTab();
+    }
+
+    function renderRoadmapTab() {
+      const box = document.getElementById("roadmapList");
+      box.innerHTML = "";
+      CURRICULUM.forEach((c, idx) => {
+        const item = document.createElement("div");
+        item.className = "list-item";
+        const isDone = idx < questIndex;
+        item.innerHTML = `
+          <div>
+            <strong>${c.stage}</strong>
+            <div style="color:var(--subtext); font-size:11px;">Target: ${c.jp || c.jpTemplate} (${c.answer})</div>
+          </div>
+          <div>${isDone ? "✅ Cleared" : "🔒 Locked"}</div>
+        `;
+        box.appendChild(item);
+      });
+    }
+
+    function renderGrimoireTab() {
+      const box = document.getElementById("grimoireList");
+      box.innerHTML = "";
+      if (unlockedKanji.length === 0) {
+        box.innerHTML = `<div style="font-size:13px; color:var(--subtext); padding:10px;">No Kanji spells unlocked yet. Clear N5 quests to unlock!</div>`;
+        return;
+      }
+      unlockedKanji.forEach(k => {
+        const item = document.createElement("div");
+        item.className = "list-item";
+        item.innerHTML = `<div><strong style="font-size:22px; color:var(--accent);">${k}</strong></div><div>✨ Spell Active</div>`;
+        box.appendChild(item);
+      });
+    }
+
+    function renderHeroTab() {
+      let activeRank = RANKS[0];
+      for (let i = 0; i < RANKS.length; i++) {
+        if (totalExp >= RANKS[i].minExp) activeRank = RANKS[i];
+      }
+      document.getElementById("heroClassLabel").innerText = `${heroAvatar} Chosen Hunter`;
+      document.getElementById("heroRankLabel").innerText = activeRank.rank;
+      document.getElementById("heroDamageLabel").innerText = `${(10000 - bossHp).toLocaleString()} DMG`;
+    }
+
+    // 7. VOICE AUDIO
     function playVoiceGuidance() {
       sfxTap();
       const current = isSkipTestActive ? testQuestions[testStep] : CURRICULUM[questIndex % CURRICULUM.length];
@@ -496,7 +1113,7 @@
       return item.jp;
     }
 
-    // 7. UI RENDERER
+    // 8. BATTLE UI
     function updateUI() {
       isAnsweringBlocked = false;
       const current = CURRICULUM[questIndex % CURRICULUM.length];
@@ -505,7 +1122,7 @@
       document.getElementById("jpDisplay").innerText = renderDynamicText(current);
       document.getElementById("romajiDisplay").innerText = current.romaji || "";
       document.getElementById("promptText").innerText = "Cast the correct counter-spell:";
-      document.getElementById("feedbackDisplay").innerText = "Answer correctly to damage the Demon Lord!";
+      document.getElementById("feedbackDisplay").innerText = "Read the Theory Scroll or strike!";
 
       const optionsBox = document.getElementById("optionsBox");
       optionsBox.innerHTML = "";
@@ -517,7 +1134,6 @@
         optionsBox.appendChild(btn);
       });
 
-      // Update Hero Rank & Level
       let activeRank = RANKS[0];
       for (let i = 0; i < RANKS.length; i++) {
         if (totalExp >= RANKS[i].minExp) activeRank = RANKS[i];
@@ -528,18 +1144,17 @@
       document.getElementById("armorName").innerText = activeRank.armor;
       document.getElementById("avatarDisplay").innerText = heroAvatar;
       document.getElementById("playerNameDisplay").innerText = heroName;
-      document.getElementById("statCounts").innerText = `Quests: ${questIndex} | Level: ${playerLevel}`;
+      document.getElementById("statCounts").innerText = `Mastered: ${questIndex} | Level: ${playerLevel}`;
 
       let pct = Math.min(100, Math.round((totalExp / 500) * 100));
       document.getElementById("expFill").style.width = pct + "%";
 
-      // Boss HP update
       const bossPct = Math.max(0, Math.round((bossHp / MAX_BOSS_HP) * 100));
       document.getElementById("bossHpFill").style.width = bossPct + "%";
       document.getElementById("bossHpLabel").innerText = `HP: ${bossHp.toLocaleString()} / 10,000`;
     }
 
-    // 8. BATTLE ACTIONS
+    // 9. COMBAT & ANSWER CHECKING
     function checkNormalAnswer(selected, btn, item) {
       if (isAnsweringBlocked) return;
       isAnsweringBlocked = true;
@@ -573,10 +1188,10 @@
       }
     }
 
-    // 9. SKIP TEST SYSTEM (80% TO PASS)
+    // 10. SKIP TEST
     function startSkipTest() {
       sfxTap();
-      if (!confirm("Challenge Boss Gatekeeper? Score 80% (4/5) to skip this tier and deal 1,000 damage!")) return;
+      if (!confirm("Challenge Gatekeeper Trial? Score 80% (4/5) to skip this tier and deal 1,000 damage!")) return;
 
       isSkipTestActive = true;
       testStep = 0;
@@ -593,7 +1208,7 @@
       isAnsweringBlocked = false;
       const q = testQuestions[testStep];
 
-      document.getElementById("lessonCategory").innerText = `TRIAL QUESTION ${testStep + 1} / 5 (80% REQUIRED)`;
+      document.getElementById("lessonCategory").innerText = `TRIAL QUESTION ${testStep + 1} / 5 (80% PASS)`;
       document.getElementById("jpDisplay").innerText = renderDynamicText(q);
       document.getElementById("romajiDisplay").innerText = q.romaji || "";
       document.getElementById("promptText").innerText = "Chant the ancient incantation:";
@@ -623,21 +1238,13 @@
       } else {
         sfxHurt();
         btn.classList.add("wrong");
-        testErrors.push({
-          question: q.jp,
-          chosen: selected,
-          correct: q.answer,
-          explanation: q.note
-        });
+        testErrors.push({ question: q.jp, chosen: selected, correct: q.answer, explanation: q.note });
       }
 
       setTimeout(() => {
         testStep++;
-        if (testStep < 5) {
-          renderTestStep();
-        } else {
-          showTestResults();
-        }
+        if (testStep < 5) renderTestStep();
+        else showTestResults();
       }, 900);
     }
 
@@ -655,27 +1262,27 @@
         title.innerText = "🏆 TRIAL CONQUERED!";
         title.style.color = "var(--success)";
         bossHp = Math.max(0, bossHp - 1000);
-        scoreDisp.innerHTML = `<strong>Score: ${testScore}/5 (${pct}%)</strong> — Massive Strike! -1,000 Demon Lord HP & +80 EXP awarded!`;
+        scoreDisp.innerHTML = `<strong>Score: ${testScore}/5 (${pct}%)</strong> — Massive Strike! -1,000 Boss HP & +80 EXP!`;
         totalExp += 80;
-        questIndex += 3;
+        questIndex += 2;
         saveState();
       } else {
         title.innerText = "⚠️ TRIAL FAILED (Need 80%)";
         title.style.color = "var(--danger)";
-        scoreDisp.innerHTML = `<strong>Score: ${testScore}/5 (${pct}%)</strong> — You fell short of the 80% threshold. Study the analysis below:`;
+        scoreDisp.innerHTML = `<strong>Score: ${testScore}/5 (${pct}%)</strong> — Below 80%. Review your mistakes below:`;
       }
 
       if (testErrors.length === 0) {
-        diagList.innerHTML = `<div style="font-size:13px; color:var(--success);">Flawless performance! You countered every attack.</div>`;
+        diagList.innerHTML = `<div style="font-size:13px; color:var(--success);">Flawless victory! No errors detected.</div>`;
       } else {
         testErrors.forEach(err => {
           const item = document.createElement("div");
-          item.className = "error-item";
+          item.style.cssText = "background:#090e1a; border-left:3px solid var(--danger); padding:8px; border-radius:6px; font-size:12px; text-align:left;";
           item.innerHTML = `
-            <div>Rune: <strong>${err.question}</strong></div>
+            <div>Glyph: <strong>${err.question}</strong></div>
             <div style="color:var(--danger);">You Cast: ${err.chosen}</div>
-            <div style="color:var(--success);">Correct Incantation: ${err.correct}</div>
-            <div style="margin-top:2px; color:var(--subtext);">💡 <em>Rule: ${err.explanation}</em></div>
+            <div style="color:var(--success);">Correct: ${err.correct}</div>
+            <div style="color:var(--subtext); margin-top:2px;">💡 ${err.explanation}</div>
           `;
           diagList.appendChild(item);
         });
@@ -690,7 +1297,7 @@
       updateUI();
     }
 
-    // 10. CUSTOMIZATION & MODALS
+    // 11. CUSTOMIZATION
     function openCustomizer() {
       sfxTap();
       document.getElementById("nameInput").value = heroName;
@@ -723,8 +1330,8 @@
       document.querySelectorAll(".modal-overlay").forEach(m => m.style.display = "none");
     }
 
-    if (!localStorage.getItem("jp_prologueSeen")) {
-      setTimeout(triggerPrologue, 400);
+        if (!localStorage.getItem("jp_prologueSeen")) {
+      setTimeout(triggerPrologue, 300);
     }
 
     updateUI();
