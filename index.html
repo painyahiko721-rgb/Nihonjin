@@ -25,30 +25,32 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
-      padding: 8px;
+      position: fixed;
+      inset: 0;
     }
 
-    /* 16:9 WIDESCREEN VIDEO GAME CONTAINER */
+    /* STRICT LOCKED 16:9 LANDSCAPE RETRO GAME CONTAINER */
     .game-viewport {
-      width: 100%;
-      max-width: 854px;
-      aspect-ratio: 16 / 9;
+      width: 100vw;
+      height: 56.25vw;
+      max-height: 100vh;
+      max-width: 177.78vh;
       background-color: var(--console-bg);
-      border: 3px solid #334155;
-      border-radius: 12px;
+      border: 2px solid #334155;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      box-shadow: 0 0 50px rgba(0,0,0,0.9);
     }
 
     .game-hud {
       background: linear-gradient(180deg, #1e1b4b 0%, #111827 100%);
       border-bottom: 2px solid #374151;
-      padding: 8px 14px;
+      padding: 6px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -60,7 +62,7 @@
     .game-stage {
       flex: 1;
       display: grid;
-      grid-template-columns: 290px 1fr;
+      grid-template-columns: 280px 1fr;
       background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #090d16 80%);
       position: relative;
       overflow: hidden;
@@ -69,61 +71,60 @@
     .mentor-sidebar {
       background: rgba(15, 23, 42, 0.95);
       border-right: 2px solid var(--border);
-      padding: 12px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       justify-content: space-between;
     }
-    .goddess-portrait-box { display: flex; align-items: center; gap: 10px; }
-    .goddess-img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
-    .goddess-nameplate { font-size: 12px; font-weight: bold; color: var(--gold); }
+    .goddess-portrait-box { display: flex; align-items: center; gap: 8px; }
+    .goddess-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+    .goddess-nameplate { font-size: 11px; font-weight: bold; color: var(--gold); }
     
     .teaching-box {
       background: #0f172a;
       border: 1px solid rgba(251, 191, 36, 0.4);
-      border-radius: 10px;
-      padding: 10px;
+      border-radius: 8px;
+      padding: 8px;
       font-size: 11px;
       color: #fde68a;
-      line-height: 1.4;
+      line-height: 1.35;
       flex: 1;
       overflow-y: auto;
     }
     .voice-toggle-row { display: flex; gap: 6px; }
     .ctrl-btn {
       background: #1e293b; color: var(--accent); border: 1px solid var(--border);
-      padding: 6px 10px; border-radius: 6px; font-size: 10px; font-weight: bold; cursor: pointer;
+      padding: 5px 8px; border-radius: 6px; font-size: 10px; font-weight: bold; cursor: pointer;
       flex: 1; text-align: center;
     }
 
     .battle-area {
-      padding: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .encounter-badge { font-size: 10px; font-weight: 800; color: #f87171; text-transform: uppercase; background: rgba(239,68,68,0.15); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(239,68,68,0.3); }
-    .target-display { font-size: 36px; font-weight: bold; color: var(--accent); text-shadow: 0 0 15px rgba(56, 189, 248, 0.4); line-height: 1.1; }
-    .romaji-sub { font-size: 12px; color: var(--gold); font-style: italic; }
+    .encounter-badge { font-size: 10px; font-weight: 800; color: #f87171; text-transform: uppercase; background: rgba(239,68,68,0.15); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(239,68,68,0.3); }
+    .target-display { font-size: 32px; font-weight: bold; color: var(--accent); text-shadow: 0 0 12px rgba(56, 189, 248, 0.4); line-height: 1.1; }
+    .romaji-sub { font-size: 11px; color: var(--gold); font-style: italic; }
 
-    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 380px; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 360px; }
     .option-btn {
-      padding: 10px; border-radius: 8px; border: 1px solid var(--border);
-      background: #1e293b; color: var(--text); font-size: 12px; font-weight: 600; cursor: pointer;
-      transition: transform 0.1s; text-align: center;
+      padding: 8px; border-radius: 6px; border: 1px solid var(--border);
+      background: #1e293b; color: var(--text); font-size: 11px; font-weight: 600; cursor: pointer;
+      text-align: center;
     }
-    .option-btn:active { transform: scale(0.96); }
     .option-btn.correct { background: var(--success) !important; color: #000 !important; }
     .option-btn.wrong { background: var(--danger) !important; color: #fff !important; }
 
-    .action-feedback { font-size: 11px; color: var(--subtext); min-height: 20px; }
+    .action-feedback { font-size: 10px; color: var(--subtext); min-height: 18px; }
 
     .game-nav {
-      height: 48px; background: #090d16; border-top: 2px solid var(--border);
+      height: 42px; background: #090d16; border-top: 2px solid var(--border);
       display: grid; grid-template-columns: repeat(4, 1fr);
     }
     .nav-tab {
@@ -138,16 +139,16 @@
 
     .prologue-overlay {
       position: absolute; inset: 0; background: #000; z-index: 100;
-      display: flex; flex-direction: column; justify-content: space-between; padding: 16px;
+      display: flex; flex-direction: column; justify-content: space-between; padding: 12px;
     }
-    .prologue-img-box { flex: 1; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #0b1120; }
+    .prologue-img-box { flex: 1; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #0b1120; }
     .prologue-img { width: 100%; height: 100%; object-fit: cover; }
-    .prologue-dialogue { background: #111827; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .prologue-btn { background: #2563eb; color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .prologue-dialogue { background: #111827; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+    .prologue-btn { background: #2563eb; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; }
 
-    .modal-layer { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
-    .modal-box { background: #111827; border: 1px solid var(--border); border-radius: 12px; padding: 16px; width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; }
-    .list-item { background: #1e293b; padding: 8px; border-radius: 6px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-layer { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+    .modal-box { background: #111827; border: 1px solid var(--border); border-radius: 10px; padding: 14px; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 8px; }
+    .list-item { background: #1e293b; padding: 6px 8px; border-radius: 6px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
@@ -161,6 +162,7 @@
       <!-- MENTOR SIDEBAR -->
       <div class="mentor-sidebar">
         <div class="goddess-portrait-box">
+          <!-- Update filename here if your goddess image has a custom name -->
           <img src="goddess.png" class="goddess-img" alt="Goddess">
           <div>
             <div class="goddess-nameplate">Goddess Lunaria</div>
@@ -226,6 +228,7 @@
     <!-- PROLOGUE OVERLAY -->
     <div class="prologue-overlay" id="prologueOverlay">
       <div class="prologue-img-box">
+        <!-- Update filename here if your street image has a custom name -->
         <img id="prologueImage" src="street.png" class="prologue-img" alt="Scene">
       </div>
       <div class="prologue-dialogue">
@@ -245,7 +248,7 @@
       </div>
     </div>
   </div>
-    <script>
+  <script>
     const CURRICULUM = [];
 
     // Phase 1: Script Basics
@@ -255,14 +258,14 @@
       { type: "intro", title: "Introduction to Kanji", display: "漢字", romaji: "Adopted Chinese characters", answer: "Used for core meanings of nouns, verbs, and adjectives", options: ["Used for core meanings of nouns, verbs, and adjectives", "Used only for punctuation", "Used only for spelling sounds", "Used for decoration"], lesson: "Kanji represent core ideas and meanings for nouns, verb stems, and adjectives." }
     );
 
-    // Phase 2: Minna no Nihongo Lessons 1 to 50 with Generational Boss Milestones
+    // Phase 2: Minna no Nihongo Lessons 1 to 50 with General and Monster King Milestones
     for (let i = 1; i <= 50; i++) {
       let encounterType = "monster";
       let reqCount = 5;
 
       if (i % 10 === 0) {
         encounterType = "general"; // Demon Lord General every 10 lessons
-        reqCount = 20 + ((i / 10 - 1) * 5); // General 1: 20, General 2: 25, etc.
+        reqCount = 20 + ((i / 10 - 1) * 5); // General 1: 20, General 2: 25, scaling +5
       } else if (i % 3 === 0) {
         encounterType = "king"; // Monster King every 3 lessons
         reqCount = 10;
@@ -461,12 +464,16 @@
       document.getElementById("heroNameInput").value = heroName;
       document.getElementById("profileModal").style.display = "flex";
     }
+    
     function closeProfileModal() {
       document.getElementById("profileModal").style.display = "none";
     }
+    
     function saveHeroProfile() {
       const val = document.getElementById("heroNameInput").value.trim();
-      if (val) heroName = val;
+      if (val) {
+        heroName = val;
+      }
       saveState();
       closeProfileModal();
       updateGameUI();
@@ -479,3 +486,4 @@
   </script>
 </body>
 </html>
+
