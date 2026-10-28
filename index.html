@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Isekai Japanese: Minna no Nihongo Masterclass</title>
+  <title>Japhon: Ancient Language Academy (Minna no Nihongo RPG)</title>
   <style>
     :root {
       --bg: #030712;
@@ -99,7 +99,7 @@
       flex: 1; text-align: center;
     }
 
-    .battle-area {
+    .hero-area {
       padding: 12px;
       display: flex;
       flex-direction: column;
@@ -108,9 +108,9 @@
       text-align: center;
       gap: 8px;
     }
-    .encounter-badge { font-size: 10px; font-weight: 800; color: #f87171; text-transform: uppercase; background: rgba(239,68,68,0.15); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(239,68,68,0.3); }
-    .target-display { font-size: 32px; font-weight: bold; color: var(--accent); text-shadow: 0 0 12px rgba(56, 189, 248, 0.4); line-height: 1.1; }
-    .romaji-sub { font-size: 11px; color: var(--gold); font-style: italic; }
+    .encounter-badge { font-size: 10px; font-weight: 800; color: #38bdf8; text-transform: uppercase; background: rgba(56,189,248,0.15); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.3); }
+    .target-display { font-size: 32px; font-weight: bold; color: var(--gold); text-shadow: 0 0 12px rgba(251, 191, 36, 0.4); line-height: 1.1; }
+    .romaji-sub { font-size: 11px; color: var(--subtext); font-style: italic; }
 
     .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; max-width: 360px; }
     .option-btn {
@@ -137,15 +137,6 @@
     .screen-panel { display: none; width: 100%; height: 100%; flex-direction: column; }
     .screen-panel.active { display: flex; }
 
-    .prologue-overlay {
-      position: absolute; inset: 0; background: #000; z-index: 100;
-      display: flex; flex-direction: column; justify-content: space-between; padding: 12px;
-    }
-    .prologue-img-box { flex: 1; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #0b1120; }
-    .prologue-img { width: 100%; height: 100%; object-fit: cover; }
-    .prologue-dialogue { background: #111827; border: 1px solid var(--border); border-radius: 6px; padding: 10px; margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
-    .prologue-btn { background: #2563eb; color: #fff; border: none; padding: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; }
-
     .modal-layer { position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
     .modal-box { background: #111827; border: 1px solid var(--border); border-radius: 10px; padding: 14px; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 8px; }
     .list-item { background: #1e293b; padding: 6px 8px; border-radius: 6px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; }
@@ -153,25 +144,28 @@
 </head>
 <body>
   <div class="game-viewport">
+    <!-- TOP HUD -->
     <div class="game-hud">
-      <span id="hudTitle">⚔️ ISEKAI JAPANESE RPG</span>
-      <span id="heroRankHUD">Rank E | EXP: 0</span>
+      <span id="hudTitle">🏛️ JAPHON: Ancient Language Academy</span>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <span id="heroRankHUD">Rank E | EXP: 0</span>
+        <button onclick="openHistoryModal()" style="background:#1e293b; color:var(--gold); border:1px solid var(--border); padding:2px 8px; border-radius:4px; font-size:10px; cursor:pointer;">📜 History</button>
+      </div>
     </div>
 
     <div class="game-stage">
-      <!-- MENTOR SIDEBAR -->
+      <!-- MENTOR SIDEBAR (Goddess Lunaria) -->
       <div class="mentor-sidebar">
         <div class="goddess-portrait-box">
-          <!-- Update filename here if your goddess image has a custom name -->
           <img src="goddess.png" class="goddess-img" alt="Goddess">
           <div>
             <div class="goddess-nameplate">Goddess Lunaria</div>
-            <div style="font-size: 9px; color: var(--subtext);">Master Guide</div>
+            <div style="font-size: 9px; color: var(--subtext);">Ancient Guide</div>
           </div>
         </div>
 
         <div class="teaching-box" id="goddessTeachingText">
-          "Welcome, hero! Before we start Minna no Nihongo, let's learn how Japanese writing scripts work!"
+          "Welcome to the Academy, Hero! Let us study the sacred writing system of the ancients (Japanese)."
         </div>
 
         <div class="voice-toggle-row">
@@ -182,159 +176,112 @@
 
       <!-- RIGHT STAGE: VIEWS -->
       <div style="position:relative; width:100%; height:100%; overflow:hidden;">
-        <!-- TAB 1: BATTLE & LESSON -->
-        <div class="screen-panel active" id="panel-battle">
-          <div class="battle-area">
-            <div class="encounter-badge" id="encounterBadge">INTRODUCTORY SCRIPT LESSON</div>
-            <div class="target-display" id="runeDisplay">Hiragana</div>
-            <div class="romaji-sub" id="romajiDisplay">Phonetic alphabet for native Japanese words</div>
+        <!-- TAB 1: ADVENTURE & LESSONS -->
+        <div class="screen-panel active" id="panel-adventure">
+          <div class="hero-area">
+            <div class="encounter-badge" id="encounterBadge">ANCIENT SCRIPT LESSON 1</div>
+            <div class="target-display" id="runeDisplay">ひらがな (Hiragana)</div>
+            <div class="romaji-sub" id="romajiDisplay">Curved phonetic alphabet for native words</div>
 
             <div class="options-grid" id="optionsGrid"></div>
-            <div class="action-feedback" id="actionFeedback">Read the lesson on the left, then answer the multiple-choice question!</div>
+            <div class="action-feedback" id="actionFeedback">Read Lunaria's explanation on the left, then select the correct answer!</div>
           </div>
         </div>
 
-        <!-- TAB 2: ROADMAP -->
-        <div class="screen-panel" id="panel-roadmap" style="padding:14px; overflow-y:auto;">
-          <div style="font-weight:bold; font-size:13px; color:var(--gold); margin-bottom:8px;">🗺️ Full 50-Lesson Syllabus Roadmap</div>
-          <div id="roadmapList" style="display:flex; flex-direction:column; gap:6px;"></div>
-        </div>
-
-        <!-- TAB 3: GRIMOIRE -->
+        <!-- TAB 2: GRIMOIRE (Learned Lessons) -->
         <div class="screen-panel" id="panel-grimoire" style="padding:14px; overflow-y:auto;">
-          <div style="font-weight:bold; font-size:13px; color:var(--accent); margin-bottom:8px;">📖 Mastered Lessons & Spells</div>
+          <div style="font-weight:bold; font-size:13px; color:var(--accent); margin-bottom:8px;">📖 Grimoire (Mastered Lessons)</div>
           <div id="grimoireList" style="display:flex; flex-direction:column; gap:6px;"></div>
         </div>
 
-        <!-- TAB 4: HERO -->
+        <!-- TAB 3: EQUIPMENT (Clothes & Weapons) -->
         <div class="screen-panel" id="panel-hero" style="padding:16px; display:flex; flex-direction:column; gap:8px; justify-content:center;">
-          <div style="font-size:15px; font-weight:bold; color:var(--gold);">Guild Record</div>
+          <div style="font-size:15px; font-weight:bold; color:var(--gold);">🛡️ Hero Equipment & Status</div>
           <div style="font-size:12px; color:var(--subtext);">Hero Name: <strong id="heroNameText" style="color:#fff;">Isekai Hero</strong></div>
-          <div style="font-size:12px; color:var(--subtext);">Armor Tier: <strong id="heroArmorText" style="color:var(--accent);">Novice Cloth</strong></div>
-          <button class="prologue-btn" onclick="openProfileModal()" style="max-width:200px;">Change Hero Name</button>
-          <button class="prologue-btn" onclick="triggerPrologue()" style="max-width:200px; background:#475569;">Replay Story Cutscene</button>
+          <div style="font-size:12px; color:var(--subtext);">Weapon: <strong style="color:var(--accent);">Ancient Bronze Sword</strong></div>
+          <div style="font-size:12px; color:var(--subtext);">Outfit / Armor: <strong id="heroArmorText" style="color:var(--success);">Novice Scholar Robe</strong></div>
+          <button class="ctrl-btn" onclick="openProfileModal()" style="max-width:200px; padding:8px;">Edit Hero Name & Avatar</button>
+        </div>
+
+        <!-- TAB 4: STATUS / REWARDS -->
+        <div class="screen-panel" id="panel-status" style="padding:14px; overflow-y:auto;">
+          <div style="font-weight:bold; font-size:13px; color:var(--gold); margin-bottom:8px;">⭐ Full 50-Lesson Syllabus Roadmap</div>
+          <div id="roadmapList" style="display:flex; flex-direction:column; gap:6px;"></div>
         </div>
       </div>
     </div>
 
-    <!-- NAVIGATION BAR -->
+    <!-- 4 CORE NAVIGATION BUTTONS -->
     <nav class="game-nav">
-      <button class="nav-tab active" id="tab-btn-battle" onclick="switchGameTab('battle')">⚔️ Battle</button>
-      <button class="nav-tab" id="tab-btn-roadmap" onclick="switchGameTab('roadmap')">🗺️ Roadmap</button>
-      <button class="nav-tab" id="tab-btn-grimoire" onclick="switchGameTab('grimoire')">📖 Grimoire</button>
-      <button class="nav-tab" id="tab-btn-hero" onclick="switchGameTab('hero')">👤 Hero</button>
+      <button class="nav-tab active" id="tab-btn-adventure" onclick="switchGameTab('adventure')">🗺️ 1. Adventure</button>
+      <button class="nav-tab" id="tab-btn-grimoire" onclick="switchGameTab('grimoire')">📖 2. Grimoire</button>
+      <button class="nav-tab" id="tab-btn-hero" onclick="switchGameTab('hero')">🛡️ 3. Equipment</button>
+      <button class="nav-tab" id="tab-btn-status" onclick="switchGameTab('status')">⭐ 4. Status</button>
     </nav>
 
-    <!-- PROLOGUE OVERLAY -->
-    <div class="prologue-overlay" id="prologueOverlay">
-      <div class="prologue-img-box">
-        <!-- Update filename here if your street image has a custom name -->
-        <img id="prologueImage" src="street.png" class="prologue-img" alt="Scene">
-      </div>
-      <div class="prologue-dialogue">
-        <div style="font-size:10px; text-transform:uppercase; color:var(--gold); font-weight:bold;" id="prologueTitle">Chapter 1: The Crosswalk</div>
-        <div style="font-size:13px; line-height:1.4;" id="prologueDesc">School ends. You walk down the road thinking about your favorite video games...</div>
-        <button class="prologue-btn" onclick="nextPrologueScene()">Continue ➔</button>
-      </div>
-    </div>
-
-    <!-- PROFILE MODAL -->
+    <!-- PROFILE EDIT MODAL -->
     <div class="modal-layer" id="profileModal">
       <div class="modal-box">
-        <div style="font-size:14px; font-weight:bold; color:var(--accent);">Edit Hero Name</div>
-        <input type="text" id="heroNameInput" style="padding:8px; border-radius:6px; background:#090d16; border:1px solid var(--border); color:#fff;" placeholder="Enter name...">
-        <button class="prologue-btn" onclick="saveHeroProfile()">Save Changes</button>
+        <div style="font-size:14px; font-weight:bold; color:var(--accent);">Edit Hero Profile</div>
+        <input type="text" id="heroNameInput" style="padding:8px; border-radius:6px; background:#090d16; border:1px solid var(--border); color:#fff;" placeholder="Enter hero name...">
+        <button class="ctrl-btn" onclick="saveHeroProfile()" style="background:var(--success); color:#000; padding:10px;">Save Changes</button>
         <button style="background:none; border:none; color:var(--subtext); cursor:pointer;" onclick="closeProfileModal()">Cancel</button>
       </div>
     </div>
+
+    <!-- HISTORY MODAL -->
+    <div class="modal-layer" id="historyModal">
+      <div class="modal-box">
+        <div style="font-size:14px; font-weight:bold; color:var(--gold);">📜 Japanese Writing System History</div>
+        <div style="font-size:11px; color:var(--subtext); line-height:1.4;">
+          Japanese ancient language evolved by adopting Chinese Kanji characters, then simplifying them into Hiragana for native words and Katakana for loanwords. Master these scripts to unlock N5-N3 Minna no Nihongo powers!
+        </div>
+        <button class="ctrl-btn" onclick="closeHistoryModal()" style="padding:8px;">Close History</button>
+      </div>
+    </div>
   </div>
+
   <script>
     const CURRICULUM = [];
 
-    // Phase 1: Script Basics
+    // Phase 1: Ancient Script History & Basics
     CURRICULUM.push(
-      { type: "intro", title: "Introduction to Hiragana", display: "ひらがな", romaji: "Curved phonetic script", answer: "Used for native Japanese words and grammar endings", options: ["Used for native Japanese words and grammar endings", "Used exclusively for foreign words", "Used for Chinese characters", "Used for numbers only"], lesson: "Hiragana is a curved phonetic alphabet used for native Japanese words and grammatical inflections." },
-      { type: "intro", title: "Introduction to Katakana", display: "カタカナ", romaji: "Angular phonetic script", answer: "Used for foreign loanwords, names, and magic", options: ["Used for foreign loanwords, names, and magic", "Used for native verbs", "Used for ancient poetry", "Used for writing numbers"], lesson: "Katakana features angular strokes used for foreign loanwords, names, and spell names." },
-      { type: "intro", title: "Introduction to Kanji", display: "漢字", romaji: "Adopted Chinese characters", answer: "Used for core meanings of nouns, verbs, and adjectives", options: ["Used for core meanings of nouns, verbs, and adjectives", "Used only for punctuation", "Used only for spelling sounds", "Used for decoration"], lesson: "Kanji represent core ideas and meanings for nouns, verb stems, and adjectives." }
+      { title: "Introduction to Hiragana", display: "ひらがな", romaji: "Curved ancient script", answer: "Used for native Japanese words and grammar endings", options: ["Used for native Japanese words and grammar endings", "Used exclusively for foreign loanwords", "Used for Chinese characters only", "Used for ancient magic spells"], lesson: "Hiragana developed from cursive Chinese characters to write native Japanese grammar and phonetic words." },
+      { title: "Introduction to Katakana", display: "カタカナ", romaji: "Angular ancient script", answer: "Used for foreign loanwords and names", options: ["Used for foreign loanwords and names", "Used for native verbs", "Used for poetry", "Used for numbers"], lesson: "Katakana uses angular fragments of Chinese characters to represent foreign words and spell nomenclature." },
+      { title: "Introduction to Kanji", display: "漢字", romaji: "Ideographic logographs", answer: "Used for core meanings of nouns, verbs, and adjectives", options: ["Used for core meanings of nouns, verbs, and adjectives", "Used only for punctuation", "Used for pronunciation sounds", "Used for decoration"], lesson: "Kanji are ancient logographic characters imported from China to convey core concepts and ideas." }
     );
 
-    // Phase 2: Minna no Nihongo Lessons 1 to 50 with General and Monster King Milestones
+    // Phase 2: Minna no Nihongo Lessons 1 to 50 (N5 to N3)
     for (let i = 1; i <= 50; i++) {
-      let encounterType = "monster";
-      let reqCount = 5;
-
-      if (i % 10 === 0) {
-        encounterType = "general"; // Demon Lord General every 10 lessons
-        reqCount = 20 + ((i / 10 - 1) * 5); // General 1: 20, General 2: 25, scaling +5
-      } else if (i % 3 === 0) {
-        encounterType = "king"; // Monster King every 3 lessons
-        reqCount = 10;
-      }
-
       CURRICULUM.push({
-        type: "minna",
         lessonNum: i,
-        encounter: encounterType,
-        requiredCorrect: reqCount,
         title: `Minna no Nihongo Lesson ${i}`,
         display: `Lesson ${i} Core Grammar`,
-        romaji: `Syllabus Part ${i}`,
-        answer: `Mastered Lesson ${i} Grammar Concept`,
-        options: [`Mastered Lesson ${i} Grammar Concept`, `Incorrect Grammar Rule A`, `Incorrect Vocabulary B`, `Incorrect Particle C`],
-        lesson: `Minna no Nihongo Lesson ${i}: Goddess Lunaria teaches key sentence patterns. Answer ${reqCount} questions correctly to clear this milestone!`
+        romaji: `Syllabus Milestone Part ${i}`,
+        answer: `Mastered Lesson ${i} Concept`,
+        options: [`Mastered Lesson ${i} Concept`, `Incorrect Grammar Rule A`, `Incorrect Vocabulary B`, `Incorrect Particle C`],
+        lesson: `Minna no Nihongo Lesson ${i}: Goddess Lunaria teaches essential grammar patterns and vocabulary for your N5-N3 journey.`
       });
     }
 
     const RANKS = [
-      { minExp: 0, rank: "Rank E", armor: "Novice Cloth" },
-      { minExp: 150, rank: "Rank D", armor: "Leather Armor" },
-      { minExp: 400, rank: "Rank C", armor: "Mithril Vest" }
+      { minExp: 0, rank: "Rank E", outfit: "Novice Scholar Robe" },
+      { minExp: 150, rank: "Rank D", outfit: "Adept Mage Tunic" },
+      { minExp: 400, rank: "Rank C", outfit: "Master Sage Vestments" }
     ];
 
-    let questIndex = parseInt(localStorage.getItem("jp_questIndex")) || 0;
-    let totalExp = parseInt(localStorage.getItem("jp_totalExp")) || 0;
-    let currentEncounterProgress = parseInt(localStorage.getItem("jp_encounterProgress")) || 0;
-    let unlockedGrimoire = JSON.parse(localStorage.getItem("jp_unlockedGrimoire")) || [];
-    let heroName = localStorage.getItem("jp_heroName") || "Isekai Hero";
+    let questIndex = parseInt(localStorage.getItem("japhon_questIndex")) || 0;
+    let totalExp = parseInt(localStorage.getItem("japhon_totalExp")) || 0;
+    let unlockedGrimoire = JSON.parse(localStorage.getItem("japhon_unlockedGrimoire")) || [];
+    let heroName = localStorage.getItem("japhon_heroName") || "Isekai Hero";
     let autoVoiceEnabled = true;
     let isLocked = false;
 
     function saveState() {
-      localStorage.setItem("jp_questIndex", questIndex);
-      localStorage.setItem("jp_totalExp", totalExp);
-      localStorage.setItem("jp_encounterProgress", currentEncounterProgress);
-      localStorage.setItem("jp_unlockedGrimoire", JSON.stringify(unlockedGrimoire));
-      localStorage.setItem("jp_heroName", heroName);
-    }
-
-    let prologueIdx = 0;
-    const PROLOGUE_SCENES = [
-      { title: "Chapter 1: Walking Home", desc: "School ends. You walk down the sunlit street thinking about fantasy RPGs...", img: "street.png" },
-      { title: "Chapter 2: Truck-kun Strike", desc: "HONK HONK! A runaway delivery truck barrels through the red light—IMPACT!", img: "truck.png" },
-      { title: "Chapter 3: Goddess Summons", desc: "Goddess Lunaria: 'Master writing scripts and all 50 Minna no Nihongo lessons to defeat the 5 Demon Lord Generals and save Princess Seraphina 👸⛓️!'", img: "princess.png" }
-    ];
-
-    function triggerPrologue() {
-      prologueIdx = 0;
-      document.getElementById("prologueOverlay").style.display = "flex";
-      renderPrologueScene();
-    }
-
-    function renderPrologueScene() {
-      const s = PROLOGUE_SCENES[prologueIdx];
-      document.getElementById("prologueTitle").innerText = s.title;
-      document.getElementById("prologueDesc").innerText = s.desc;
-      document.getElementById("prologueImage").src = s.img;
-    }
-
-    function nextPrologueScene() {
-      prologueIdx++;
-      if (prologueIdx < PROLOGUE_SCENES.length) {
-        renderPrologueScene();
-      } else {
-        document.getElementById("prologueOverlay").style.display = "none";
-        localStorage.setItem("jp_prologueSeen", "true");
-      }
+      localStorage.setItem("japhon_questIndex", questIndex);
+      localStorage.setItem("japhon_totalExp", totalExp);
+      localStorage.setItem("japhon_unlockedGrimoire", JSON.stringify(unlockedGrimoire));
+      localStorage.setItem("japhon_heroName", heroName);
     }
 
     function playLessonVoice() {
@@ -357,20 +304,11 @@
       isLocked = false;
       const current = CURRICULUM[questIndex % CURRICULUM.length];
 
-      let badgeText = "INTRO SCRIPT LESSON";
-      if (current.type === "minna") {
-        if (current.encounter === "general") badgeText = `⚠️ DEMON LORD GENERAL BATTLE (${current.lessonNum}/50)`;
-        else if (current.encounter === "king") badgeText = `👑 DUNGEON MONSTER KING (${current.lessonNum}/50)`;
-        else badgeText = `⚔️ MINNA NO NIHONGO LESSON ${current.lessonNum}`;
-      }
-
-      document.getElementById("encounterBadge").innerText = badgeText;
+      document.getElementById("encounterBadge").innerText = current.lessonNum ? `MINNA NO NIHONGO LESSON ${current.lessonNum}` : "ANCIENT SCRIPT LESSON";
       document.getElementById("goddessTeachingText").innerText = `"${current.lesson}"`;
       document.getElementById("runeDisplay").innerText = current.display;
       document.getElementById("romajiDisplay").innerText = current.romaji;
-      
-      let progText = current.type === "minna" ? ` | Progress: ${current.requiredCorrect - currentEncounterProgress} left` : "";
-      document.getElementById("actionFeedback").innerText = `Read lesson on the left, then select correct answer!${progText}`;
+      document.getElementById("actionFeedback").innerText = "Read Lunaria's explanation on the left, then select the correct answer!";
 
       if (autoVoiceEnabled) {
         setTimeout(playLessonVoice, 300);
@@ -391,7 +329,7 @@
 
       document.getElementById("heroRankHUD").innerText = `${rankObj.rank} | EXP: ${totalExp}`;
       document.getElementById("heroNameText").innerText = heroName;
-      document.getElementById("heroArmorText").innerText = rankObj.armor;
+      document.getElementById("heroArmorText").innerText = rankObj.outfit;
     }
 
     function submitAnswer(selected, btn, current) {
@@ -401,21 +339,14 @@
 
       if (selected === current.answer) {
         btn.classList.add("correct");
-        totalExp += 20;
-        currentEncounterProgress++;
-
-        let targetReq = current.type === "minna" ? current.requiredCorrect : 1;
-
-        if (currentEncounterProgress >= targetReq) {
-          currentEncounterProgress = 0;
-          questIndex++;
-          if (current.type === "minna" && !unlockedGrimoire.includes(current.title)) {
-            unlockedGrimoire.push(current.title);
-          }
+        totalExp += 25;
+        questIndex++;
+        if (!unlockedGrimoire.includes(current.title)) {
+          unlockedGrimoire.push(current.title);
         }
         saveState();
 
-        document.getElementById("actionFeedback").innerText = "💥 CORRECT! Enemy damaged!";
+        document.getElementById("actionFeedback").innerText = "✨ CORRECT! Lesson mastered & EXP gained!";
         setTimeout(updateGameUI, 1100);
       } else {
         btn.classList.add("wrong");
@@ -434,7 +365,7 @@
       document.getElementById(`panel-${tabId}`).classList.add("active");
       document.getElementById(`tab-btn-${tabId}`).classList.add("active");
 
-      if (tabId === 'roadmap') renderRoadmapTab();
+      if (tabId === 'status') renderRoadmapTab();
       if (tabId === 'grimoire') renderGrimoireTab();
     }
 
@@ -444,18 +375,18 @@
       CURRICULUM.forEach((c, idx) => {
         const div = document.createElement("div");
         div.className = "list-item";
-        div.innerHTML = `<div><strong>${c.title}</strong><div style="color:var(--subtext); font-size:11px;">Target: ${c.display}</div></div><div>${idx < questIndex ? "✅ Cleared" : "🔒 Locked"}</div>`;
+        div.innerHTML = `<div><strong>${c.title}</strong><div style="color:var(--subtext); font-size:10px;">${c.display}</div></div><div>${idx < questIndex ? "✅ Mastered" : "🔒 Locked"}</div>`;
         list.appendChild(div);
       });
     }
 
     function renderGrimoireTab() {
       const list = document.getElementById("grimoireList");
-      list.innerHTML = unlockedGrimoire.length === 0 ? '<div style="font-size:12px; color:var(--subtext);">No lessons mastered yet.</div>' : '';
+      list.innerHTML = unlockedGrimoire.length === 0 ? '<div style="font-size:12px; color:var(--subtext);">No lessons mastered in your grimoire yet. Start your adventure!</div>' : '';
       unlockedGrimoire.forEach(g => {
         const div = document.createElement("div");
         div.className = "list-item";
-        div.innerHTML = `<strong style="font-size:13px; color:var(--accent);">${g}</strong><span>✨ Mastered</span>`;
+        div.innerHTML = `<strong style="font-size:12px; color:var(--accent);">${g}</strong><span>✨ Learned</span>`;
         list.appendChild(div);
       });
     }
@@ -464,26 +395,21 @@
       document.getElementById("heroNameInput").value = heroName;
       document.getElementById("profileModal").style.display = "flex";
     }
-    
     function closeProfileModal() {
       document.getElementById("profileModal").style.display = "none";
     }
-    
     function saveHeroProfile() {
       const val = document.getElementById("heroNameInput").value.trim();
-      if (val) {
-        heroName = val;
-      }
+      if (val) heroName = val;
       saveState();
       closeProfileModal();
       updateGameUI();
     }
 
-    if (!localStorage.getItem("jp_prologueSeen")) {
-      setTimeout(triggerPrologue, 400);
-    }
+    function openHistoryModal() { document.getElementById("historyModal").style.display = "flex"; }
+    function closeHistoryModal() { document.getElementById("historyModal").style.display = "none"; }
+
     updateGameUI();
   </script>
 </body>
 </html>
-
